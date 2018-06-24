@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{BD82
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC772A3D-680F-4F40-86C9-4A84EE934D60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PretWorks.HealthChecker.Samples.ASPNETCore", "Samples\PretWorks.HealthChecker.Samples.ASPNETCore\PretWorks.HealthChecker.Samples.ASPNETCore.csproj", "{50E970ED-231A-4A5F-9636-812DF0EA00F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,9 +21,16 @@ Global
 		{87912EC9-A8BB-4297-B054-18D89B196E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87912EC9-A8BB-4297-B054-18D89B196E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87912EC9-A8BB-4297-B054-18D89B196E25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50E970ED-231A-4A5F-9636-812DF0EA00F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E970ED-231A-4A5F-9636-812DF0EA00F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E970ED-231A-4A5F-9636-812DF0EA00F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E970ED-231A-4A5F-9636-812DF0EA00F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{50E970ED-231A-4A5F-9636-812DF0EA00F3} = {BD823128-6D21-42C1-8648-2D472FF4E29E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD50B2DE-DC4E-4548-ACDC-38613DA47E3D}

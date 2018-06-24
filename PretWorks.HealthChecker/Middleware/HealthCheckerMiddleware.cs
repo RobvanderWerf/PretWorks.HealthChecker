@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Net;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -29,11 +31,60 @@ namespace PretWorks.HealthChecker.Middleware
             {
                 _logger.LogDebug("HealthChecker middleware triggered");
 
-                var result = new HealthCheckerResult();
+                var stopwatch = Stopwatch.StartNew();
+
+                var results = new List<HealthCheckerResult>();
+
+                foreach (var healthChecker in _settings.HealthCheckers)
+                {
+
+                    var individualStopwatch = Stopwatch.StartNew();
+                    var healthResult = new HealthCheckerResult();
+                    try
+                    {
+                        healthResult = await healthChecker.RunAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, "Healthchecker failed");
+                        healthResult.Status = HealthCheckerStatus.Error;
+                        healthResult.Message = $"{healthChecker.GetType()} failed to run to completion";
+                    }
+
+                    individualStopwatch.Stop();
+                    healthResult.Time = individualStopwatch.ElapsedMilliseconds;
+                    results.Add(healthResult);
+                }
+
+                stopwatch.Stop();
+
+                var status = HealthCheckerStatus.Ok;
+                httpContext.Response.StatusCode = _settings.HttpStatusCodeOnOk;
+
+                if (results.Any(a => a.Status == HealthCheckerStatus.Error))
+                {
+                    status = HealthCheckerStatus.Error;
+                    httpContext.Response.StatusCode = _settings.HttpStatusCodeOnError;
+                }
+                else if (results.Any(a => a.Status == HealthCheckerStatus.Warning))
+                {
+                    status = HealthCheckerStatus.Warning;
+                    httpContext.Response.StatusCode = _settings.HttpStatusCodeOnWarning;
+                }
 
                 httpContext.Response.ContentType = "application/json";
-                httpContext.Response.StatusCode = (int)HttpStatusCode.OK;
-                await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(result, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+                await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(
+                    new
+                    {
+                        Totaltime = stopwatch.ElapsedMilliseconds,
+                        HealthCheckers = results,
+                        Status = status
+                    },
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    }
+                ));
 
                 return;
             }
@@ -44,9 +95,9 @@ namespace PretWorks.HealthChecker.Middleware
 
     public static class HealthCheckerMiddlewareExtensions
     {
-        public static IApplicationBuilder UseHealthChecker(this IApplicationBuilder builder,Action<HealthCheckerSettings> configureSettings)
+        public static IApplicationBuilder UseHealthChecker(this IApplicationBuilder builder, Action<HealthCheckerSettings> configureSettings)
         {
-            var settings = new HealthCheckerSettings();
+            var settings = new HealthCheckerSettings(builder.ApplicationServices);
 
             configureSettings(settings);
 
