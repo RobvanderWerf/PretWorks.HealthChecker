@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 using PretWorks.HealthChecker.Interfaces;
 
 namespace PretWorks.HealthChecker.Models
 {
     public class HealthCheckerSettings
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public HealthCheckerSettings(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
 
         /// <summary>
         /// Path for the healthchecker to listen on
@@ -41,12 +34,9 @@ namespace PretWorks.HealthChecker.Models
 
         public void AddHealthChecker<T>() where T : IHealthChecker
         {
-            if (ActivatorUtilities.CreateInstance(_serviceProvider, typeof(T)) is IHealthChecker healthChecker)
-            {
-                HealthCheckers.Add(healthChecker);
-            }
+            HealthCheckers.Add(typeof(T));
         }
 
-        public List<IHealthChecker> HealthCheckers { get; } = new List<IHealthChecker>();
+        public List<Type> HealthCheckers { get; } = new List<Type>();
     }
 }

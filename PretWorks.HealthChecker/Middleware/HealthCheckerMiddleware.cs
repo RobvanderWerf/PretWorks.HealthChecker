@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PretWorks.HealthChecker.Interfaces;
 using PretWorks.HealthChecker.Models;
 
 namespace PretWorks.HealthChecker.Middleware
@@ -25,7 +27,7 @@ namespace PretWorks.HealthChecker.Middleware
             _settings = settings;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext, IServiceProvider serviceProvider)
         {
             if (HttpMethods.IsGet(httpContext.Request.Method) && httpContext.Request.Path.StartsWithSegments(_settings.Path))
             {
@@ -35,25 +37,27 @@ namespace PretWorks.HealthChecker.Middleware
 
                 var results = new List<HealthCheckerResult>();
 
-                foreach (var healthChecker in _settings.HealthCheckers)
+                foreach (var healthCheckerType in _settings.HealthCheckers)
                 {
-
-                    var individualStopwatch = Stopwatch.StartNew();
-                    var healthResult = new HealthCheckerResult();
-                    try
+                    if (ActivatorUtilities.CreateInstance(serviceProvider, healthCheckerType) is IHealthChecker healthChecker)
                     {
-                        healthResult = await healthChecker.RunAsync();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Healthchecker failed");
-                        healthResult.Status = HealthCheckerStatus.Error;
-                        healthResult.Message = $"{healthChecker.GetType()} failed to run to completion";
-                    }
+                        var individualStopwatch = Stopwatch.StartNew();
+                        var healthResult = new HealthCheckerResult();
+                        try
+                        {
+                            healthResult = await healthChecker.RunAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e, "Healthchecker failed");
+                            healthResult.Status = HealthCheckerStatus.Error;
+                            healthResult.Message = $"{healthChecker.GetType()} failed to run to completion";
+                        }
 
-                    individualStopwatch.Stop();
-                    healthResult.Time = individualStopwatch.ElapsedMilliseconds;
-                    results.Add(healthResult);
+                        individualStopwatch.Stop();
+                        healthResult.Time = individualStopwatch.ElapsedMilliseconds;
+                        results.Add(healthResult);
+                    }
                 }
 
                 stopwatch.Stop();
@@ -97,7 +101,7 @@ namespace PretWorks.HealthChecker.Middleware
     {
         public static IApplicationBuilder UseHealthChecker(this IApplicationBuilder builder, Action<HealthCheckerSettings> configureSettings)
         {
-            var settings = new HealthCheckerSettings(builder.ApplicationServices);
+            var settings = new HealthCheckerSettings();
 
             configureSettings(settings);
 

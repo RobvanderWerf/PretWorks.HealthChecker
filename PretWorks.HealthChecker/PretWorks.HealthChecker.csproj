@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Company>PretWorks</Company>
     <Authors>Rob van der Werf</Authors>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker</PackageProjectUrl>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
