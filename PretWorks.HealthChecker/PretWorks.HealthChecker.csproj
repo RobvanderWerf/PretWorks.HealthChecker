@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Company>PretWorks</Company>
     <Authors>Rob van der Werf</Authors>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker/blob/master/LICENSE</PackageLicenseUrl>
