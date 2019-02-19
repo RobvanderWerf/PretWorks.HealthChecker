@@ -4,21 +4,21 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Company>PretWorks</Company>
     <Authors>Rob van der Werf</Authors>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/XGNPreTender/PretWorks.HealthChecker</PackageProjectUrl>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
 </Project>
